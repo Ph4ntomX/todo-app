@@ -7,7 +7,7 @@
     $database = new PDO("mysql:host=$host;dbname=$database_name", $username, $password);
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["add_label"])) {
+        if (isset($_POST["add_label"]) && !empty($_POST["add_label"])) {
             $label = $_POST["add_label"];
             $recipe = "INSERT INTO todos (label) VALUES (:label)";
             $statement = $database->prepare($recipe);
