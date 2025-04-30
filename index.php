@@ -20,7 +20,7 @@
             $complete_id = $_POST["complete_id"];
             $completed = $_POST["completed"];
 
-            if ($completed == 0) {
+            if ($completed == '0') {
                 $completed = 1;
             } else {
                 $completed = 0;
