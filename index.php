@@ -6,7 +6,9 @@
 
     $database = new PDO("mysql:host=$host;dbname=$database_name", $username, $password);
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    session_start();
+
+    if (isset($_SESSION["user"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["add_label"]) && !empty($_POST["add_label"])) {
             $label = $_POST["add_label"];
             $recipe = "INSERT INTO todos (label) VALUES (:label)";
@@ -63,13 +65,16 @@
 <body>
     <div class="card rounded shadow-sm" style="max-width: 500px; margin: 60px auto;">
         <div class="card-body">
-            <h3 class="card-title mb-3">My Todo List</h3>
-            <ul class="list-group">
-                <?php
+            <h3 class="card-title">My Todo List</h3>
+            <?php if (isset($_SESSION["user"])) : ?>
+                <p class="mb-3">Hello, <?= $_SESSION["user"]["name"] ?></p>
+
+                <ul class="list-group">
+                    <?php
                     $recipe = "SELECT * FROM todos";
                     $statement = $database->query($recipe);
                     $rows = $statement->fetchAll();
-                ?>
+                    ?>
                 
                 <?php foreach ($rows as $row) : ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -113,6 +118,18 @@
                     <button type="submit" class="btn py-2 btn-primary btn-sm rounded ms-2">Add</button>
                 </form>
             </div>
+
+            
+            <div class="text-center">
+                <a href="logout.php">Logout</a>
+            </div>  
+            <?php else : ?>
+                <div class="text-primary d-flex gap-2">
+                    <a href="login.php">Login</a>
+                    <a href="signup.php">Sign Up</a>
+                </div>
+            <?php endif ?>
+            
         </div>
     </div>
 
